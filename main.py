@@ -3,6 +3,7 @@ from azure.storage.blob import BlobServiceClient
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import os
 
 app = FastAPI()
 origins = ["http://localhost:3000"]
@@ -15,9 +16,7 @@ app.add_middleware(
 )
 
 # Configure Azure
-config = configparser.ConfigParser()
-config.read("config.ini")
-azure_connection_string = config["azure"]["connection_string"]
+azure_connection_string = os.environ.get("AZURE_BLOB_CONNECTION_STRING")
 blob_service_client = BlobServiceClient.from_connection_string(azure_connection_string)
 INPUT_CONTAINER = "original-videos"
 OUTPUT_CONTAINER = "processed-videos"
